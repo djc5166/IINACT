@@ -209,6 +209,18 @@ public class MainWindow : Window, IDisposable
             Plugin.Configuration.Save();
         }
 
+        ImGui.Spacing();
+        ImGui.Separator();
+        ImGui.Spacing();
+
+        var playerCharacterName = Plugin.Configuration.PlayerCharacterName;
+        ImGui.SetNextItemWidth(elementWidth);
+        if (ImGui.InputText("Player name", ref playerCharacterName, 100))
+        {
+            Plugin.Configuration.PlayerCharacterName = playerCharacterName;
+            Plugin.Configuration.Save();
+        }
+
         if (!showDebug) return;
 
         ImGui.Spacing();

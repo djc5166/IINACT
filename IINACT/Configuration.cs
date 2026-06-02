@@ -46,6 +46,12 @@ public class Configuration : IPluginConfiguration
         set => Advanced_Combat_Tracker.ActGlobals.oFormActMain.DisableWritingPvpLogFile = value;
     }
 
+    public string PlayerCharacterName
+    {
+        get => Advanced_Combat_Tracker.ActGlobals.charName;
+        set => Advanced_Combat_Tracker.ActGlobals.charName = string.IsNullOrEmpty(value) ? "YOU" : value;
+    }
+
     public int Version { get; set; } = 1;
     
     public string? SelectedOverlay { get; set; }
