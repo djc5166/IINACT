@@ -50,6 +50,10 @@ public class Configuration : IPluginConfiguration
     
     public string? SelectedOverlay { get; set; }
 
+    public string GoogleTtsLanguage { get; set; } = "en";
+    
+    public bool ForceGoogleTts { get; set; }
+
     public void Initialize(IDalamudPluginInterface pluginInterface)
     {
         PluginInterface = pluginInterface;

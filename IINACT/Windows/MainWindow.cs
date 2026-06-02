@@ -44,6 +44,7 @@ public class MainWindow : Window, IDisposable
 
         DrawMainWindow();
         DrawParseSettings();
+        DrawTtsSettings();
         DrawWebSocketSettings();
     }
 
@@ -227,6 +228,33 @@ public class MainWindow : Window, IDisposable
             Plugin.Configuration.ShowRealDoTTicks = showRealDoTTicks;
             Plugin.Configuration.Save();
         }
+    }
+
+    private void DrawTtsSettings()
+    {
+        using var tab = ImRaii.TabItem("Text to Speech");
+        if (!tab) return;
+        
+        ImGui.Spacing();
+
+        var forceGoogleTts = Plugin.Configuration.ForceGoogleTts;
+        if (ImGui.Checkbox("Force Google TTS instead of SAPI", ref forceGoogleTts))
+        {
+            Plugin.Configuration.ForceGoogleTts = forceGoogleTts;
+            Plugin.Configuration.Save();
+        }
+
+        ImGui.Spacing();
+
+        var googleTtsLanguage = Plugin.Configuration.GoogleTtsLanguage;
+        ImGui.SetNextItemWidth(100 * ImGuiHelpers.GlobalScale);
+        if (ImGui.InputText("Google TTS Language", ref googleTtsLanguage, 10))
+        {
+            Plugin.Configuration.GoogleTtsLanguage = googleTtsLanguage;
+            Plugin.Configuration.Save();
+        }
+        ImGui.SameLine();
+        ImGui.TextColored(ImGuiColors.DalamudGrey, "(e.g. ja, en, de, fr, ko)");
     }
 
     private void DrawWebSocketSettings()
