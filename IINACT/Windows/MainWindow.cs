@@ -11,6 +11,7 @@ using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using NAudio.Wave;
+using RainbowMage.OverlayPlugin.EventSources;
 
 namespace IINACT.Windows;
 
@@ -32,6 +33,7 @@ public class MainWindow : Window, IDisposable
     }
 
     public IPluginConfig? OverlayPluginConfig { get; set; }
+    public BuiltinEventConfig? OverlayPluginEventConfig { get; set; }
     public IReadOnlyList<RainbowMage.OverlayPlugin.IOverlayTemplate>? OverlayPresets { get; set; }
     private string[]? OverlayNames => OverlayPresets?.Select(x => x.Name).ToArray();
     public RainbowMage.OverlayPlugin.WebSocket.ServerController? Server { get; set; }
@@ -201,6 +203,20 @@ public class MainWindow : Window, IDisposable
         {
             Plugin.Configuration.DisableCombinePets = disableCombinePets;
             Plugin.Configuration.Save();
+        }
+
+        var endEncounterOutOfCombat = OverlayPluginEventConfig?.EndEncounterOutOfCombat ?? true;
+        if (ImGui.Checkbox("End encounter automatically after leaving combat", ref endEncounterOutOfCombat))
+        {
+            if (OverlayPluginEventConfig is not null)
+            {
+                OverlayPluginEventConfig.EndEncounterOutOfCombat = endEncounterOutOfCombat;
+                if (OverlayPluginConfig is not null)
+                {
+                    OverlayPluginEventConfig.SaveConfig(OverlayPluginConfig);
+                    OverlayPluginConfig.Save();
+                }
+            }
         }
 
         var showDebug = Plugin.Configuration.ShowDebug;
