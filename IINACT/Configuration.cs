@@ -21,6 +21,8 @@ public class Configuration : IPluginConfiguration
     public bool DisableCombinePets { get; set; }
 
     public bool DisablePvp { get; set; }
+
+    public bool LogChatMessages { get; set; } = true;
     
     public bool SimulateIndividualDoTCrits { get; set; }
 

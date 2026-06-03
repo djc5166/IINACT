@@ -191,6 +191,14 @@ public class MainWindow : Window, IDisposable
             Plugin.Configuration.Save();
         }
 
+        var logChatMessages = Plugin.Configuration.LogChatMessages;
+        if (ImGui.Checkbox("Include chat and echo messages in log files", ref logChatMessages))
+        {
+            Plugin.Configuration.LogChatMessages = logChatMessages;
+            Plugin.SetChatMessageLoggingEnabled(logChatMessages);
+            Plugin.Configuration.Save();
+        }
+
         var disableDamageShield = Plugin.Configuration.DisableDamageShield;
         if (ImGui.Checkbox("Disable Damage Shield Estimates", ref disableDamageShield))
         {

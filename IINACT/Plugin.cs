@@ -242,6 +242,11 @@ public sealed class Plugin : IDalamudPlugin
         MainWindow.IsOpen = true;
     }
 
+    internal void SetChatMessageLoggingEnabled(bool enabled)
+    {
+        FfxivActPluginWrapper.SetChatMessageLoggingEnabled(enabled);
+    }
+
     private void EnterPvP()
     {
         if (Configuration is not { DisablePvp: true, DisableWritingPvpLogFile: false })
