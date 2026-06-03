@@ -60,6 +60,8 @@ public class Configuration : IPluginConfiguration
     
     public bool ForceGoogleTts { get; set; }
 
+    public int TtsPlaybackDevice { get; set; } = -1;
+
     public void Initialize(IDalamudPluginInterface pluginInterface)
     {
         PluginInterface = pluginInterface;

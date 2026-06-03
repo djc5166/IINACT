@@ -10,6 +10,7 @@ using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
+using NAudio.Wave;
 
 namespace IINACT.Windows;
 
@@ -248,6 +249,8 @@ public class MainWindow : Window, IDisposable
         if (!tab) return;
         
         ImGui.Spacing();
+        ImGui.TextColored(ImGuiColors.DalamudGrey, "Google TTS:");
+        ImGui.Spacing();
 
         var forceGoogleTts = Plugin.Configuration.ForceGoogleTts;
         if (ImGui.Checkbox("Force Google TTS instead of SAPI", ref forceGoogleTts))
@@ -260,13 +263,41 @@ public class MainWindow : Window, IDisposable
 
         var googleTtsLanguage = Plugin.Configuration.GoogleTtsLanguage;
         ImGui.SetNextItemWidth(100 * ImGuiHelpers.GlobalScale);
-        if (ImGui.InputText("Google TTS Language", ref googleTtsLanguage, 10))
+        if (ImGui.InputText("Language", ref googleTtsLanguage, 10))
         {
             Plugin.Configuration.GoogleTtsLanguage = googleTtsLanguage;
             Plugin.Configuration.Save();
         }
         ImGui.SameLine();
         ImGui.TextColored(ImGuiColors.DalamudGrey, "(e.g. ja, en, de, fr, ko)");
+        ImGui.Spacing();
+
+        var ttsDeviceCount = WaveOut.DeviceCount;
+        var currentDevice = Plugin.Configuration.TtsPlaybackDevice;
+        var currentDeviceName = currentDevice == -1 ? "Default" : WaveOut.GetCapabilities(currentDevice).ProductName;
+        
+        ImGui.SetNextItemWidth(200 * ImGuiHelpers.GlobalScale);
+
+        if (ImGui.BeginCombo("Playback Device", currentDeviceName))
+        {
+            if (ImGui.Selectable("Default", currentDevice == -1))
+            {
+                Plugin.Configuration.TtsPlaybackDevice = -1;
+                Plugin.Configuration.Save();
+            }
+
+            for (var i = 0; i < ttsDeviceCount; i++)
+            {
+                var caps = WaveOut.GetCapabilities(i);
+                if (ImGui.Selectable(caps.ProductName, currentDevice == i))
+                {
+                    Plugin.Configuration.TtsPlaybackDevice = i;
+                    Plugin.Configuration.Save();
+                }
+            }
+
+            ImGui.EndCombo();
+        }
     }
 
     private void DrawWebSocketSettings()
