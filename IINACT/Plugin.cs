@@ -104,6 +104,7 @@ public sealed class Plugin : IDalamudPlugin
         Advanced_Combat_Tracker.ActGlobals.oFormActMain.LogFilePath = Configuration.LogFilePath;
 
         FfxivActPluginWrapper = new FfxivActPluginWrapper(Configuration, DataManager.Language, ChatGui, Framework, Condition);
+        Task.Run(() => NetworkLogCleanup.Cleanup(Configuration));
         OverlayPlugin = InitOverlayPlugin();
 
         IpcProviders = new IpcProviders(PluginInterface);

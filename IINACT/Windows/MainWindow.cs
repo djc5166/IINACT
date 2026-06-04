@@ -199,6 +199,26 @@ public class MainWindow : Window, IDisposable
             Plugin.Configuration.Save();
         }
 
+        var autoDeleteNetworkLogs = Plugin.Configuration.AutoDeleteNetworkLogs;
+        if (ImGui.Checkbox("Automatically delete old network log files", ref autoDeleteNetworkLogs))
+        {
+            Plugin.Configuration.AutoDeleteNetworkLogs = autoDeleteNetworkLogs;
+            Plugin.Configuration.Save();
+        }
+
+        if (autoDeleteNetworkLogs)
+        {
+            var networkLogRetentionDays = Plugin.Configuration.NetworkLogRetentionDays;
+            ImGui.Text("Delete logs older than");
+            ImGui.SameLine();
+            ImGui.SetNextItemWidth(30 * ImGuiHelpers.GlobalScale);
+            if (ImGui.InputInt("days", ref networkLogRetentionDays))
+            {
+                Plugin.Configuration.NetworkLogRetentionDays = Math.Clamp(networkLogRetentionDays, 1, 3650);
+                Plugin.Configuration.Save();
+            }
+        }
+
         var disableDamageShield = Plugin.Configuration.DisableDamageShield;
         if (ImGui.Checkbox("Disable Damage Shield Estimates", ref disableDamageShield))
         {
